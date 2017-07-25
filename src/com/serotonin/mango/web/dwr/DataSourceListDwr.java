@@ -135,4 +135,5 @@ public class DataSourceListDwr extends BaseDwr {
 		new UserDao().populateUserPermissions(Common.getUser());
 		return dsId;
 	}
+	
 }

@@ -19,6 +19,9 @@
 <%@ include file="/WEB-INF/jsp/include/tech.jsp" %>
 <tag:page dwr="DataSourceListDwr" onload="init">
   <script>
+  	var dslist = [];
+  	var enable = false;
+  	
     function init() {
         DataSourceListDwr.init(function(response) {
             if (response.data.types) {
@@ -67,6 +70,7 @@
                 // Delete the points section.
                 row = $("points"+ dataSourceId);
                 row.parentNode.removeChild(row);
+                window.location.reload();
             });
         }
     }
@@ -83,13 +87,30 @@
             DataSourceListDwr.deleteDataPoint(pointId, function(pointId) {
                 var row = $("pointRow"+ pointId);
                 row.parentNode.removeChild(row);
+                
             });
         }
+        window.location.reload();
     }
     
     function addDataSource() {
         window.location = "data_source_edit.shtm?typeId="+ $get("dataSourceTypes");
     }
+    
+    function toggleDataSources() {
+
+    	for(var i=0; i<dslist.length; i++){
+    		toggleDataSource(dslist[i])
+    	}
+    	console.log(dslist);
+    	
+    }
+    
+    function addDataSourceToList(pointId){
+    	dslist.push(parseInt(pointId));
+    	console.log(dslist);
+    }
+    
   </script>
   
   <table cellspacing="0" cellpadding="0">
@@ -102,6 +123,7 @@
       <td align="right" id="dataSourceTypesContent" style="display:none">
         <select id="dataSourceTypes"></select>
         <tag:img png="icon_ds_add" title="common.add" onclick="addDataSource()"/>
+        <tag:img png="arrow_out" title="Disale" onclick="toggleDataSources()"/>
       </td>
     </tr>
     
@@ -124,6 +146,7 @@
                 <c:forEach items="${data}" var="listParent"> 
                     <tr class="row" id="dataSourceRow${listParent.parent.id}">
                     <td><b>${listParent.parent.name}</b></td>
+                    <script>addDataSourceToList("${listParent.parent.id}")</script>
                     <td><fmt:message key="${listParent.parent.type.key}"/></td>
                     <td><sst:i18n message="${listParent.parent.connectionDescription}"/></td>
                     <td align="center">
