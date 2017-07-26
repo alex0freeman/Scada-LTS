@@ -33,11 +33,20 @@
     
     function toggleDataSource(dataSourceId) {
         var imgNode = $("dsImg"+ dataSourceId);
+        var dwrResult;
         if (!hasImageFader(imgNode)) {
-            DataSourceListDwr.toggleDataSource(dataSourceId, function(result) {
-                updateStatusImg($("dsImg"+ result.id), result.enabled, true);
-            });
-            startImageFader(imgNode);
+        	if(arguments.length==1){
+        		DataSourceListDwr.toggleDataSource(dataSourceId, function(result) {
+        			updateStatusImg($("dsImg"+ result.id), result.enabled, true);
+        			dwrResult = result;
+                });
+        	} else {
+        		DataSourceListDwr.toggleDataSource(dataSourceId, arguments[1], function(result) {
+        			updateStatusImg($("dsImg"+ result.id), result.enabled, true);
+                    });
+        		window.location.reload();
+        	}
+            
         }
     }
     
@@ -99,16 +108,18 @@
     
     function toggleDataSources() {
 
+    	
     	for(var i=0; i<dslist.length; i++){
-    		toggleDataSource(dslist[i])
+        	toggleDataSource(dslist[i],enable)
     	}
+    	enable = !enable;
     	console.log(dslist);
+    	console.log(enable);
     	
     }
     
     function addDataSourceToList(pointId){
     	dslist.push(parseInt(pointId));
-    	console.log(dslist);
     }
     
   </script>
@@ -123,7 +134,7 @@
       <td align="right" id="dataSourceTypesContent" style="display:none">
         <select id="dataSourceTypes"></select>
         <tag:img png="icon_ds_add" title="common.add" onclick="addDataSource()"/>
-        <tag:img png="arrow_out" title="Disale" onclick="toggleDataSources()"/>
+        <button onclick="toggleDataSources()">Disable/Enable</button>
       </td>
     </tr>
     

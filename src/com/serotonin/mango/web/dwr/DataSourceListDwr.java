@@ -106,6 +106,20 @@ public class DataSourceListDwr extends BaseDwr {
 		result.put("id", dataSourceId);
 		return result;
 	}
+	
+	public Map<String, Object> toggleDataSource(int dataSourceId, boolean enable) {
+		Permissions.ensureDataSourcePermission(Common.getUser(), dataSourceId);
+		RuntimeManager runtimeManager = Common.ctx.getRuntimeManager();
+		DataSourceVO<?> dataSource = runtimeManager.getDataSource(dataSourceId);
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		dataSource.setEnabled(enable);
+		runtimeManager.saveDataSource(dataSource);
+
+		result.put("enabled", dataSource.isEnabled());
+		result.put("id", dataSourceId);
+		return result;
+	}
 
 	public int deleteDataSource(int dataSourceId) {
 		Permissions.ensureDataSourcePermission(Common.getUser(), dataSourceId);
