@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.scada_lts.mango.service.DataSourceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,13 +21,14 @@ import com.serotonin.mango.vo.User;
 import com.serotonin.mango.vo.dataSource.DataSourceVO;
 import com.serotonin.mango.vo.dataSource.DataSourceVO.Type;
 
+@Controller
 public class DataSourceAPI {
 	
 	private static final Log LOG = LogFactory.getLog(DataSourceAPI.class);
 	
 	private DataSourceService dataSourceService = new DataSourceService();
 	
-	@RequestMapping(value = "/api/source_properties/getProperties/{xid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/data_source/getProperties/{xid}", method = RequestMethod.POST)
 	public ResponseEntity<String> getProperties(@PathVariable("xid") String xid, HttpServletRequest request) {
 		LOG.info("/api/source_properties/getProperties/{xid} id:"+xid);
 		
