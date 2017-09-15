@@ -20,6 +20,7 @@
 <tag:page dwr="DataSourceListDwr" onload="init">
   <script>
     function init() {
+    	displayDataSource();
         DataSourceListDwr.init(function(response) {
             if (response.data.types) {
                 dwr.util.addOptions("dataSourceTypes", response.data.types, "key", "value");
@@ -27,6 +28,14 @@
             }
         });
     }
+    
+    function displayDataSource() {
+    	jQuery.get( "./api/data_sources/getAll", function( data ) {
+    		jQuery('#dataSourcesTable').append("<tr><td>" + data.name + "</td></tr>");
+    	 });
+
+    }
+    
     
     function toggleDataSource(dataSourceId) {
         var imgNode = $("dsImg"+ dataSourceId);
@@ -187,6 +196,20 @@
               </table>
             </td>
           </tr>
+          
+          <table id="dataSourcesTable" cellspacing="1" cellpadding="0" border="0">
+          <tbody>
+    		<tr class="rowHeader">
+                  <td><fmt:message key="dsList.name"/></td>
+                  <td><fmt:message key="dsList.type"/></td>
+                  <td><fmt:message key="dsList.connection"/></td>
+                  <td><fmt:message key="dsList.status"/></td>
+                  <td></td>
+               </tr>
+ 			 </tbody
+                   
+            </table>
+                
           
         </table>  
       </td>

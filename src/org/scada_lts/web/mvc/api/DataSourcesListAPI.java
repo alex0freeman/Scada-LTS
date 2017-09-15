@@ -22,6 +22,7 @@ import com.serotonin.mango.Common;
 import com.serotonin.mango.vo.User;
 import com.serotonin.mango.vo.WatchList;
 import com.serotonin.mango.vo.dataSource.DataSourceVO;
+import com.serotonin.mango.vo.dataSource.DataSourceVO.Type;
 
 /**
  * Controller for data sources list
@@ -48,32 +49,46 @@ public class DataSourcesListAPI {
 				class DataSourceJSON implements Serializable{
 					private String xid;
 					private String name;
-					private String dataSourceType;
+					private Type dataSourceType;
 					
-					DataSourceJSON(String xid,String name) {
+					DataSourceJSON(String xid, String name, Type type) {
 						this.setXid(xid);
 						this.setName(name);
+						this.setDataSourceType(type);
 					}
-					
-					public void setXid(String xid) {
-						this.xid = xid;
-					}
-					public void setName(String name) {
-						this.name = name;
-					}
+
 					public String getXid() {
 						return xid;
 					}
+
+					public void setXid(String xid) {
+						this.xid = xid;
+					}
+
 					public String getName() {
 						return name;
 					}
+
+					public void setName(String name) {
+						this.name = name;
+					}
+
+					public Type getDataSourceType() {
+						return dataSourceType;
+					}
+
+					public void setDataSourceType(Type type) {
+						this.dataSourceType = type;
+					}
+					
+					
 				}
 				
 				List<DataSourceVO<?>> listDS = dataSourceService.getDataSources();
 				
 				List<DataSourceJSON> lst = new ArrayList<DataSourceJSON>();
 				for (DataSourceVO ds:listDS) {
-					DataSourceJSON dsJ = new DataSourceJSON(ds.getXid(), ds.getName());
+					DataSourceJSON dsJ = new DataSourceJSON(ds.getXid(), ds.getName(), ds.getType());
 					lst.add(dsJ);
 				}
 				
