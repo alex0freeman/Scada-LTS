@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.scada_lts.service.ScriptingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,7 +28,7 @@ import br.org.scadabr.vo.scripting.ScriptVO;
 import br.org.scadabr.vo.scripting.ScriptVO.Type;
 
 /**
-* Controller for data sources list
+* Controller for scripting
 * 
 * @author Arkadiusz Parafiniuk  
 * email: arkadiusz.parafiniuk@gmail.com
@@ -36,6 +38,9 @@ import br.org.scadabr.vo.scripting.ScriptVO.Type;
 public class ScriptingAPI {
 	
 	private static final Log LOG = LogFactory.getLog(ScriptingAPI.class);
+	
+	@Resource
+	ScriptingService scriptingService;
 	
 	@RequestMapping(value = "/api/scripting", method = RequestMethod.GET)
 	public ResponseEntity<String> getAll(HttpServletRequest request) {
@@ -76,7 +81,7 @@ public class ScriptingAPI {
 					
 				}
 				
-				List<ScriptVO<?>> scripts = new ScriptDao().getScripts();
+				List<ScriptVO<?>> scripts = scriptingService.getScripts();
 				
 				List<ScriptsListJSON> scriptsJSON = new ArrayList<ScriptsListJSON> ();
 				for(ScriptVO script : scripts){
@@ -100,7 +105,7 @@ public class ScriptingAPI {
 	
 	@RequestMapping(value = "/api/scripting/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> getScript(@PathVariable("id") int id, HttpServletRequest request) {
-		LOG.info("/api/scripting/{xid} id:" + id);
+		LOG.info("/api/scripting/{id} id:" + id);
 		
 		try {
 			User user = Common.getUser(request);
@@ -169,15 +174,32 @@ public class ScriptingAPI {
 					
 				}
 				
-				ContextualizedScriptVO script = (ContextualizedScriptVO) new ScriptDao().getScript(id);
+				ContextualizedScriptVO script = (ContextualizedScriptVO) scriptingService.getScript(id);
 				
 				ScriptJSON scriptJSON = new ScriptJSON(id, script.getXid(), script.getName(), script.getType(), script.getScript(), script.getPointsOnContext());
 				
 				String json = null;
 				ObjectMapper mapper = new ObjectMapper();
 				json = mapper.writeValueAsString(scriptJSON);
-				
+	
 				return new ResponseEntity<String>(json,HttpStatus.OK);	
+			} else {
+				return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception e) {
+			LOG.error(e);
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/api/scripting/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteScript(@PathVariable("id") int id, HttpServletRequest request) {
+		LOG.info("/api/scripting/{id} id:" + id);
+		try {
+			User user = Common.getUser(request);
+			if(user != null){
+				scriptingService.deleteScript(id);
+				return new ResponseEntity<String>(HttpStatus.OK);	
 			} else {
 				return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
 			}
