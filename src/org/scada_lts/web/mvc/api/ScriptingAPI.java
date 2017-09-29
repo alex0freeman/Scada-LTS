@@ -9,11 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.scada_lts.dao.ScriptDAO;
 import org.scada_lts.service.ScriptingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -21,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.serotonin.db.IntValuePair;
 import com.serotonin.mango.Common;
 import com.serotonin.mango.vo.User;
+import com.serotonin.web.dwr.DwrResponseI18n;
 
 import br.org.scadabr.db.dao.ScriptDao;
 import br.org.scadabr.vo.scripting.ContextualizedScriptVO;
@@ -203,6 +207,53 @@ public class ScriptingAPI {
 			} else {
 				return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
 			}
+		} catch (Exception e) {
+			LOG.error(e);
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/api/scripting", method = RequestMethod.POST)
+	public ResponseEntity<String> createScript(
+			@RequestHeader("xid") String xid, 
+			@RequestHeader("name") String name, 
+			@RequestHeader("script") String script, 
+			@RequestBody() List<IntValuePair> pointsOnContext, 
+			@RequestBody() List<IntValuePair> objectsOnContext, 
+			HttpServletRequest request) {
+		LOG.info("/api/scripting/createScript");
+		try {
+			User user = Common.getUser(request);
+			if(user != null){
+				scriptingService.insertScript(Common.NEW_ID, xid, name, script, pointsOnContext, objectsOnContext);
+				return new ResponseEntity<String>(HttpStatus.OK);
+			} else {
+				return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception e) {
+			LOG.error(e);
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/api/scripting/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<String> updateScript(
+			@PathVariable("id") int id,
+			@PathVariable("xid") String xid, 
+			@PathVariable("name") String name, 
+			@PathVariable("script") String script, 
+			@PathVariable("pointsOnContext") List<IntValuePair> pointsOnContext, 
+			@PathVariable("objectsOnContext") List<IntValuePair> objectsOnContext,
+			HttpServletRequest request) {
+		LOG.info("/api/scripting/updateScript {id} id:" + id);
+		try {
+				User user = Common.getUser(request);
+				if(user != null){
+					scriptingService.updateScript(id, "1324234", "aaa", "scriptscriptscript", null, null);
+					return new ResponseEntity<String>(HttpStatus.OK);
+				} else {
+					return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+				}
 		} catch (Exception e) {
 			LOG.error(e);
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
