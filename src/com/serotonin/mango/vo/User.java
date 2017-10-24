@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
+import org.scada_lts.permissions.IUser;
+
 import com.serotonin.ShouldNeverHappenException;
 import com.serotonin.json.JsonArray;
 import com.serotonin.json.JsonException;
@@ -61,7 +63,7 @@ import br.org.scadabr.vo.usersProfiles.UsersProfileVO;
 
 @JsonRemoteEntity
 public class User implements SetPointSource, HttpSessionBindingListener,
-		JsonSerializable {
+		JsonSerializable, IUser {
 	private int id = Common.NEW_ID;
 	@JsonRemoteProperty
 	private String username;
@@ -553,6 +555,11 @@ public class User implements SetPointSource, HttpSessionBindingListener,
 	@Override
 	public void pointSetComplete() {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean isAdminPermission() {
+		return this.isAdmin();
 	}
 	
 }

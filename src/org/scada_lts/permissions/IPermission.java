@@ -20,19 +20,19 @@ public interface IPermission {
 	 * @param access type
 	 * @return boolean 
 	 */
-	public boolean hasObjectPermission(IUser user, IEntityPermision object, int accessType);
+	public boolean hasObjectPermission(User user, IEntityPermision object, int accessType);
 	
 	/**
 	 * @param user
 	 * @param access type
 	 * @return the map of objects type <T> that user has access 
 	 */
-	public Map<Long, IEntityPermision> getObjectsWithPermission(IUser user, IEntityPermision object);
+	public Map<Long, IEntityPermision> getObjectsWithPermission(User user, IEntityPermision object);
 
 	/**
 	 * Check if user is admin
 	 * @param user
 	 * @return boolean
 	 */
-	public boolean hasAdminPermission(IUser user);
+	public boolean hasAdminPermission(User user);
 }

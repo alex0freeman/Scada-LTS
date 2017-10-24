@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.scada_lts.permissions.IEntityPermision;
+
 import br.org.scadabr.vo.dataSource.alpha2.Alpha2DataSourceVO;
 import br.org.scadabr.vo.dataSource.asciiFile.ASCIIFileDataSourceVO;
 import br.org.scadabr.vo.dataSource.asciiSerial.ASCIISerialDataSourceVO;
@@ -84,7 +86,7 @@ import com.serotonin.web.dwr.DwrResponseI18n;
 import com.serotonin.web.i18n.LocalizableMessage;
 
 abstract public class DataSourceVO<T extends DataSourceVO<?>> implements
-		Serializable, Cloneable, JsonSerializable, ChangeComparable<T> {
+		Serializable, Cloneable, JsonSerializable, ChangeComparable<T>, IEntityPermision {
 	public enum Type {
 		EBI25(16, "dsEdit.ebi25", false) {
 			@Override
