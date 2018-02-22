@@ -240,6 +240,10 @@ span#__header__alarmLevelText {
         height: 1px;
         background-color: transparent;
     }
+
+    .formShort {
+        display: block;
+    }
         
 }
 
@@ -349,4 +353,17 @@ img[src^="images/"]:not(#viewBackground) {
 
 .horzSeparator {
     background: #000;
+}
+
+/* Help tooltip */
+.dojoFloatingPane {
+
+    .dojoFloatingPaneTitleBar {
+        padding: 10px;
+    }
+
+    .dojoFloatingPaneTitleText {
+        color: white;
+    }
+
 }
