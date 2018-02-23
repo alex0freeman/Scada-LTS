@@ -388,11 +388,11 @@
             </tr>
             <tr>
               <td class="formLabelRequired"><fmt:message key="users.newPassword"/></td>
-              <td class="formField"><input id="password" type="text"/></td>
+              <td class="formField"><input id="password" type="password"/></td>
             </tr>
             <tr>
               <td class="formLabelRequired"><fmt:message key="users.email"/></td>
-              <td class="formField"><input id="email" type="text" class="formLong"/></td>
+              <td class="formField"><input id="email" type="email" class="formLong"/></td>
             </tr>
             <tr>
               <td class="formLabel"><fmt:message key="users.phone"/></td>

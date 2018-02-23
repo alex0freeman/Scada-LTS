@@ -262,12 +262,6 @@ input, select, textarea {
     margin: .1rem .9rem;
     border: 1px solid $primary_color_dark;
 
-    &::selection{
-        color: #263238;
-        padding: 1rem;
-        line-height: 2rem;
-    }
-
     #watchListSelect {
         padding: 0 1rem 5px;
         margin-right: 3rem;
